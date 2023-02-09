@@ -34,6 +34,7 @@ class Login extends Component {
 
     history.push('/settings');
   };
+
   startGame = () => {
     const { name, email } = this.state;
     const { playerInfo, newGame } = this.props;
