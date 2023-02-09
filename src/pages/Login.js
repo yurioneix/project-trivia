@@ -15,7 +15,7 @@ class Login extends Component {
       isDisabled: true,
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
+    // this.handleClick = this.handleClick.bind(this);
   }
 
   handleChange = (e) => {
@@ -29,11 +29,11 @@ class Login extends Component {
     }
   };
 
-  handleClick = () => {
-    const { history } = this.props;
+  // handleClick = () => {
+  //   const { history } = this.props;
 
-    history.push('/settings');
-  };
+  //   history.push('/settings');
+  // };
 
   startGame = () => {
     const { name, email } = this.state;
@@ -78,13 +78,15 @@ class Login extends Component {
               Play
             </button>
           </Link>
-          <button
-            data-testid="btn-settings"
-            type="button"
-            onClick={ this.handleClick }
-          >
-            Configurações
-          </button>
+          <Link to="/settings">
+            <button
+              data-testid="btn-settings"
+              type="button"
+              // onClick={ this.handleClick }
+            >
+              Configurações
+            </button>
+          </Link>
         </div>
       </div>
     );
