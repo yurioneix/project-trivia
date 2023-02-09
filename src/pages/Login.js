@@ -15,6 +15,7 @@ class Login extends Component {
       isDisabled: true,
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleChange = (e) => {
@@ -26,6 +27,12 @@ class Login extends Component {
     } else {
       this.setState({ isDisabled: true });
     }
+  };
+
+  handleClick = () => {
+    const { history } = this.props;
+
+    history.push('/settings');
   };
 
   startGame = () => {
@@ -71,20 +78,30 @@ class Login extends Component {
               Play
             </button>
           </Link>
+          <button
+            data-testid="btn-settings"
+            type="button"
+            onClick={ this.handleClick }
+          >
+            Configurações
+          </button>
         </div>
       </div>
     );
   }
 }
 
-Login.propTypes = {
-  playerInfo: PropTypes.func.isRequired,
-  newGame: PropTypes.func.isRequired,
-};
-
 const mapDispatchToProps = (dispatch) => ({
   playerInfo: (name, email) => dispatch(loginInfo(name, email)),
   newGame: () => dispatch(fetchNewGameToken()),
 });
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+  playerInfo: PropTypes.func.isRequired,
+  newGame: PropTypes.func.isRequired,
+};
 
 export default connect(null, mapDispatchToProps)(Login);
