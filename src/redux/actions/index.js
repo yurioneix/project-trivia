@@ -1,7 +1,7 @@
-export const NEW_PLAYER = 'NEW_PALYER';
+export const NEW_PLAYER = 'NEW_PLAYER';
 
-export const loginInfo = (nome, email) => ({
+export const loginInfo = (name, email) => ({
   type: NEW_PLAYER,
-  nome,
+  name,
   email,
 });

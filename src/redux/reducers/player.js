@@ -1,7 +1,7 @@
 import { NEW_PLAYER } from '../actions';
 
 const INITIAL_STATE = {
-  nome: '',
+  name: '',
   email: '',
 };
 
@@ -10,7 +10,7 @@ const player = (state = INITIAL_STATE, action) => {
   case NEW_PLAYER:
     return {
       ...state,
-      nome: action.name,
+      name: action.name,
       email: action.email,
     };
   default:
