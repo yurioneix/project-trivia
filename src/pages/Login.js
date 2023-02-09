@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import logo from '../trivia.png';
 import '../App.css';
+import { loginInfo } from '../redux/actions';
 
 class Login extends Component {
   constructor(state) {
@@ -63,4 +64,8 @@ class Login extends Component {
   }
 }
 
-export default connect()(Login);
+const mapDispatchToProps = (dispatch) => ({
+  playerInfo: (name, email) => dispatch(loginInfo(name, email)),
+});
+
+export default connect(null, mapDispatchToProps)(Login);
