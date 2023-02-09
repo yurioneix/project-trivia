@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import logo from '../trivia.png';
 import '../App.css';
 import { loginInfo } from '../redux/actions';
@@ -13,6 +14,7 @@ class Login extends Component {
       isDisabled: true,
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleChange = (e) => {
@@ -24,6 +26,12 @@ class Login extends Component {
     } else {
       this.setState({ isDisabled: true });
     }
+  };
+
+  handleClick = () => {
+    const { history } = this.props;
+
+    history.push('/settings');
   };
 
   render() {
@@ -58,6 +66,13 @@ class Login extends Component {
           >
             Play
           </button>
+          <button
+            data-testid="btn-settings"
+            type="button"
+            onClick={ this.handleClick }
+          >
+            Configurações
+          </button>
         </div>
       </div>
     );
@@ -67,5 +82,11 @@ class Login extends Component {
 const mapDispatchToProps = (dispatch) => ({
   playerInfo: (name, email) => dispatch(loginInfo(name, email)),
 });
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default connect(null, mapDispatchToProps)(Login);
