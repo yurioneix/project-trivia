@@ -33,8 +33,7 @@ class Login extends Component {
     const { history } = this.props;
 
     history.push('/settings');
-    };
-   
+  };
   startGame = () => {
     const { name, email } = this.state;
     const { playerInfo, newGame } = this.props;
@@ -68,7 +67,6 @@ class Login extends Component {
             value={ email }
             onChange={ this.handleChange }
           />
-          
           <Link to="/game">
             <button
               type="button"
@@ -79,7 +77,6 @@ class Login extends Component {
               Play
             </button>
           </Link>
-          
           <button
             data-testid="btn-settings"
             type="button"
@@ -87,7 +84,6 @@ class Login extends Component {
           >
             Configurações
           </button>
-          
         </div>
       </div>
     );
@@ -103,7 +99,7 @@ Login.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
-   playerInfo: PropTypes.func.isRequired,
+  playerInfo: PropTypes.func.isRequired,
   newGame: PropTypes.func.isRequired,
 };
 
