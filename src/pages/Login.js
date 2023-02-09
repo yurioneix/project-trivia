@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import logo from '../trivia.png';
+import { loginInfo, fetchNewGameToken } from '../redux/actions';
 import '../App.css';
-import { loginInfo } from '../redux/actions';
 
 class Login extends Component {
   constructor(state) {
@@ -24,6 +26,14 @@ class Login extends Component {
     } else {
       this.setState({ isDisabled: true });
     }
+  };
+
+  startGame = () => {
+    const { name, email } = this.state;
+    const { playerInfo, newGame } = this.props;
+
+    playerInfo(name, email);
+    newGame();
   };
 
   render() {
@@ -51,21 +61,30 @@ class Login extends Component {
             value={ email }
             onChange={ this.handleChange }
           />
-          <button
-            type="button"
-            data-testid="btn-play"
-            disabled={ isDisabled }
-          >
-            Play
-          </button>
+          <Link to="/game">
+            <button
+              type="button"
+              data-testid="btn-play"
+              disabled={ isDisabled }
+              onClick={ this.startGame }
+            >
+              Play
+            </button>
+          </Link>
         </div>
       </div>
     );
   }
 }
 
+Login.propTypes = {
+  playerInfo: PropTypes.func.isRequired,
+  newGame: PropTypes.func.isRequired,
+};
+
 const mapDispatchToProps = (dispatch) => ({
   playerInfo: (name, email) => dispatch(loginInfo(name, email)),
+  newGame: () => dispatch(fetchNewGameToken()),
 });
 
 export default connect(null, mapDispatchToProps)(Login);
