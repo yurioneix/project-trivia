@@ -11,3 +11,14 @@ export const fetchToken = async () => {
     console.log(error);
   }
 };
+export const fetchTrivia = async (token) => {
+  try {
+    const response = await fetch(
+      `https://opentdb.com/api.php?amount=5&token=${token}`,
+    );
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
