@@ -1,4 +1,4 @@
-import { NEW_PLAYER } from '../actions';
+import { NEW_PLAYER, NEW_SCORE } from '../actions';
 
 const INITIAL_STATE = {
   name: '',
@@ -8,12 +8,18 @@ const INITIAL_STATE = {
 };
 
 const player = (state = INITIAL_STATE, action) => {
+  console.log(action);
   switch (action.type) {
   case NEW_PLAYER:
     return {
       ...state,
       name: action.name,
       email: action.email,
+    };
+  case NEW_SCORE:
+    return {
+      ...state,
+      score: action.score,
     };
   default:
     return state;
