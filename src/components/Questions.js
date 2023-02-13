@@ -5,92 +5,68 @@ import { fetchTrivia } from '../services';
 class Questions extends Component {
   state = {
     questions: [],
-    section: '',
-    isSelected: false,
-    perguntaAtual: 0,
-    answer: [],
+    questionIndex: 0,
+    answers: [],
+    loading: true,
   };
 
-  async componentDidMount() {
-    const storageToken = localStorage.getItem('token');
-    const questionsResult = await fetchTrivia(storageToken);
-    // console.log(questionsResult.results);
-    const number = 0;
-    if (questionsResult.response_code === number) {
-      this.setState({
-        questions: questionsResult.results,
-      });
-    } else {
-      const { history } = this.props;
-      localStorage.removeItem('token');
-      history.push('/');
-    }
+  componentDidMount() {
+    this.getQuestionsData();
   }
 
-  // handleClick = () => {
+  getQuestionsData = async () => {
+    const { questionIndex } = this.state;
+    const storageToken = localStorage.getItem('token');
+    const questionsResult = await fetchTrivia(storageToken);
+    const errorCode = 3;
+    if (!questionsResult || questionsResult.response_code === errorCode) {
+      const { history } = this.props;
+      localStorage.removeItem('token');
+      return history.push('/');
+    }
 
-  // }
-
-  fillAnswers = (correct, incorrect) => {
-    const correctAnswer = (
-      <button
-        data-testid="correct-answer"
-        type="button"
-      >
-        {correct}
-
-      </button>
-    );
-    const incorrectAnswer = incorrect.map((answer, index) => (
-      <button
-        key={ index }
-        data-testid={ `wrong-answer-${index}` }
-      >
-        {answer}
-
-      </button>
-    ));
-    const nmrCinco = 5;
-    const randomIndex = Math.floor(Math.random() * nmrCinco);
-    incorrectAnswer.splice(randomIndex, 0, correctAnswer);
-    return incorrectAnswer;
+    const oneQuestion = questionsResult.results[questionIndex];
+    const questionsAnswers = [
+      ...oneQuestion.incorrect_answers,
+      oneQuestion.correct_answer,
+    ];
+    const sortIndex = 0.5;
+    const sortedAnswers = questionsAnswers.sort(() => Math.random() - sortIndex);
+    this.setState({
+      answers: sortedAnswers,
+      loading: false,
+      questions: questionsResult.results,
+    });
   };
 
+  // handleClick = () => {
+  //   const { questionIndex } = this.state;
+  //   this.setState({
+  //     questionIndex: questionIndex + 1,
+  //   });
+  // };
+
   render() {
-    const { questions, perguntaAtual } = this.state;
-    // console.log(questions);
-    // const {
-    //   category,
-    //   question,
-    //   correct_answer: correct,
-    //   incorrect_answers: incorrect,
-    // } = questions[perguntaAtual];
-    // console.log(questions[perguntaAtual]);
-    // const onlyAnswers = [questions[perguntaAtual].correct_answer, ...questions[perguntaAtual].incorrect_answers];
-    // console.log(onlyAnswers);
+    const { questions, answers, questionIndex, loading } = this.state;
+
     return (
-      <div>
-
-        { questions.length > 0 && questions.map((question, index) => (
-          <div key={ index }>
-            <h2 data-testid="question-category">
-              {question.category}
-            </h2>
-            <p data-testid="question-text">
-              {question.question}
-            </p>
-            <div data-testid="answer-options">
-              {this.fillAnswers(
-                question.correct_answer,
-                question.incorrect_answers,
-              )}
-            </div>
-
+      loading ? <span>loading...</span> : (
+        <div>
+          <h1 data-testid="question-category">{questions[questionIndex].category}</h1>
+          <h2 data-testid="question-text">{questions[questionIndex].question}</h2>
+          <div data-testid="answer-options">
+            {answers.map((answer, index) => (
+              <button
+                key={ `answer-${index + 1}` }
+                data-testid={ answer === questions[questionIndex].correct_answer
+                  ? 'correct-answer' : `wrong-answer-${index}` }
+              >
+                { answer }
+              </button>
+            ))}
           </div>
-        ))}
-        ;
-
-      </div>
+        </div>
+      )
     );
   }
 }

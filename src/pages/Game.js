@@ -1,5 +1,5 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import HeaderInfo from '../components/HeaderInfo';
 import Questions from '../components/Questions';
@@ -15,5 +15,9 @@ class Game extends React.Component {
     );
   }
 }
+
+Game.propTypes = {
+  history: PropTypes.func,
+}.isRequired;
 
 export default connect()(Game);
