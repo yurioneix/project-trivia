@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { fetchTrivia } from '../services';
 import '../pages/game.css';
 
@@ -22,6 +23,45 @@ class Questions extends Component {
   componentWillUnmount() {
     clearInterval(this.interval);
   }
+
+  scoreboard = (sec, difficulty) => {
+    let sum = 0;
+    const easy = 1;
+    const medium = 2;
+    const hard = 3;
+    const ten = 10;
+    if (difficulty === 'easy') {
+      sum = ten + (sec * easy);
+      return sum;
+    }
+    if (difficulty === 'medium') {
+      sum = ten + (sec * medium);
+      return sum;
+    }
+    if (difficulty === 'hard') {
+      sum = ten + (sec * hard);
+      return sum;
+    }
+  };
+
+  handleClass = (event) => {
+    // const { timer } = this.state;
+    this.setState({ isChoosed: true });
+    // this.scoreRecorder(event.target.innerText, timer);
+  };
+
+  // scoreRecorder = (answer, sec) => {
+  //   const { answers } = this.state;
+  //   const index = 0;
+  //   const perguntaAtual = answers[index];
+  //   const state = this.getLocalStorage();
+
+  //   if (answer === perguntaAtual.correct_answer) {
+  //     state.player.assertions += 1;
+  //     state.player.score += this.scoreboard(sec, perguntaAtual.difficulty);
+  //     return localStorage.setItem('state', JSON.stringify(state));
+  //   }
+  // };
 
   setQuestionsTimer = () => {
     const oneSec = 1000;
@@ -67,10 +107,6 @@ class Questions extends Component {
     this.setState({
       questionIndex: questionIndex + 1,
     });
-  };
-
-  handleClass = () => {
-    this.setState({ isChoosed: true });
   };
 
   render() {
@@ -123,10 +159,16 @@ class Questions extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  name: state.player.name,
+  email: state.player.email,
+});
+
 Questions.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
 };
 
-export default Questions;
+export default connect(mapStateToProps)(Questions);
