@@ -9,12 +9,31 @@ class Questions extends Component {
     questionIndex: 0,
     answers: [],
     loading: true,
-    classStyle: false,
+    isChoosed: false,
+    timer: 30,
+    isDisabled: false,
   };
 
   componentDidMount() {
     this.getQuestionsData();
+    this.setQuestionsTimer();
   }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  setQuestionsTimer = () => {
+    const oneSec = 1000;
+    this.interval = setInterval(() => {
+      const { timer } = this.state;
+      this.setState({ timer: timer - 1 });
+      if (timer === 0) {
+        clearInterval(this.interval);
+        this.setState({ isDisabled: true });
+      }
+    }, oneSec);
+  };
 
   getQuestionsData = async () => {
     const { questionIndex } = this.state;
@@ -51,15 +70,23 @@ class Questions extends Component {
   };
 
   handleClass = () => {
-    this.setState({ classStyle: true });
+    this.setState({ isChoosed: true });
   };
 
   render() {
-    const { questions, answers, questionIndex, loading, classStyle } = this.state;
+    const {
+      questions,
+      answers,
+      questionIndex,
+      loading,
+      isChoosed,
+      timer,
+      isDisabled } = this.state;
 
     return (
       loading ? <span>loading...</span> : (
         <section>
+          <p>{timer}</p>
           <div className="question-container">
             <h1 data-testid="question-category">{questions[questionIndex].category}</h1>
             <h2 data-testid="question-text">{questions[questionIndex].question}</h2>
@@ -71,9 +98,10 @@ class Questions extends Component {
             {answers.map((answer, index) => (
               <button
                 key={ `answer-${index + 1}` }
+                disabled={ isDisabled }
                 data-testid={ answer === questions[questionIndex].correct_answer
                   ? 'correct-answer' : `wrong-answer-${index}` }
-                className={ classStyle
+                className={ isChoosed
                   && (questions[questionIndex].correct_answer === answer
                     ? 'correct-answer' : 'wrong-answer') }
                 onClick={ this.handleClass }
