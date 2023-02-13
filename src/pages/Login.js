@@ -34,12 +34,14 @@ class Login extends Component {
   //   history.push('/settings');
   // };
 
-  startGame = () => {
+  startGame = async () => {
     const { name, email } = this.state;
-    const { playerInfo, newGame } = this.props;
+    const { playerInfo, newGame, history } = this.props;
 
     playerInfo(name, email);
-    newGame();
+    await newGame();
+
+    history.push('/game');
   };
 
   render() {
@@ -67,21 +69,20 @@ class Login extends Component {
             value={ email }
             onChange={ this.handleChange }
           />
-          <Link to="/game">
-            <button
-              type="button"
-              data-testid="btn-play"
-              disabled={ isDisabled }
-              onClick={ this.startGame }
-            >
-              Play
-            </button>
-          </Link>
+          {/* <Link to="/game"> */}
+          <button
+            type="button"
+            data-testid="btn-play"
+            disabled={ isDisabled }
+            onClick={ this.startGame }
+          >
+            Play
+          </button>
+          {/* </Link> */}
           <Link to="/settings">
             <button
               data-testid="btn-settings"
               type="button"
-              // onClick={ this.handleClick }
             >
               Configurações
             </button>

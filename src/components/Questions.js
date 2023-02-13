@@ -17,9 +17,11 @@ class Questions extends Component {
   getQuestionsData = async () => {
     const { questionIndex } = this.state;
     const storageToken = localStorage.getItem('token');
+
     const questionsResult = await fetchTrivia(storageToken);
     const errorCode = 3;
-    if (!questionsResult || questionsResult.response_code === errorCode) {
+
+    if (questionsResult?.response_code === errorCode) {
       const { history } = this.props;
       localStorage.removeItem('token');
       return history.push('/');
@@ -39,22 +41,27 @@ class Questions extends Component {
     });
   };
 
-  // handleClick = () => {
-  //   const { questionIndex } = this.state;
-  //   this.setState({
-  //     questionIndex: questionIndex + 1,
-  //   });
-  // };
+  handleClick = () => {
+    const { questionIndex } = this.state;
+    this.setState({
+      questionIndex: questionIndex + 1,
+    });
+  };
 
   render() {
     const { questions, answers, questionIndex, loading } = this.state;
 
     return (
       loading ? <span>loading...</span> : (
-        <div>
-          <h1 data-testid="question-category">{questions[questionIndex].category}</h1>
-          <h2 data-testid="question-text">{questions[questionIndex].question}</h2>
-          <div data-testid="answer-options">
+        <section>
+          <div className="question-container">
+            <h1 data-testid="question-category">{questions[questionIndex].category}</h1>
+            <h2 data-testid="question-text">{questions[questionIndex].question}</h2>
+          </div>
+          <div
+            className="answers-container"
+            data-testid="answer-options"
+          >
             {answers.map((answer, index) => (
               <button
                 key={ `answer-${index + 1}` }
@@ -65,7 +72,15 @@ class Questions extends Component {
               </button>
             ))}
           </div>
-        </div>
+          <div className="next-question-btn">
+            <button
+              onClick={ this.handleClick }
+              type="button"
+            >
+              Next
+            </button>
+          </div>
+        </section>
       )
     );
   }
