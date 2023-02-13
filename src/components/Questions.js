@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { fetchTrivia } from '../services';
+import '../pages/game.css';
 
 class Questions extends Component {
   state = {
@@ -8,6 +9,7 @@ class Questions extends Component {
     questionIndex: 0,
     answers: [],
     loading: true,
+    classStyle: false,
   };
 
   componentDidMount() {
@@ -41,15 +43,19 @@ class Questions extends Component {
     });
   };
 
-  handleClick = () => {
+  handleNextQuestion = () => {
     const { questionIndex } = this.state;
     this.setState({
       questionIndex: questionIndex + 1,
     });
   };
 
+  handleClass = () => {
+    this.setState({ classStyle: true });
+  };
+
   render() {
-    const { questions, answers, questionIndex, loading } = this.state;
+    const { questions, answers, questionIndex, loading, classStyle } = this.state;
 
     return (
       loading ? <span>loading...</span> : (
@@ -67,6 +73,10 @@ class Questions extends Component {
                 key={ `answer-${index + 1}` }
                 data-testid={ answer === questions[questionIndex].correct_answer
                   ? 'correct-answer' : `wrong-answer-${index}` }
+                className={ classStyle
+                  && (questions[questionIndex].correct_answer === answer
+                    ? 'correct-answer' : 'wrong-answer') }
+                onClick={ this.handleClass }
               >
                 { answer }
               </button>
@@ -74,7 +84,7 @@ class Questions extends Component {
           </div>
           <div className="next-question-btn">
             <button
-              onClick={ this.handleClick }
+              onClick={ this.handleNextQuestion }
               type="button"
             >
               Next
