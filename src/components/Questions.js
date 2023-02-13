@@ -14,6 +14,7 @@ class Questions extends Component {
     isChoosed: false,
     timer: 30,
     isDisabled: false,
+    nextQuestion: false,
   };
 
   componentDidMount() {
@@ -25,35 +26,13 @@ class Questions extends Component {
     clearInterval(this.interval);
   }
 
-  // scoreboard = () => {
-  //   const { questions, questionIndex, timer } = this.state;
-  //   let sum = 0;
-  //   const easy = 1;
-  //   const medium = 2;
-  //   const hard = 3;
-  //   const ten = 10;
-  //   if (questions[questionIndex].difficulty === 'easy') {
-  //     sum = ten + (timer * easy);
-  //     return sum;
-  //   }
-  //   if (questions[questionIndex].difficulty === 'medium') {
-  //     sum = ten + (timer * medium);
-  //     return sum;
-  //   }
-  //   if (questions[questionIndex].difficulty === 'hard') {
-  //     sum = ten + (this.setQuestionsTimer * hard);
-  //     return sum;
-  //   }
-  //   newScore(sum);
-  //   console.log(sum);
-  // };
-
   handleClass = (answer) => {
-    // const { timer } = this.state;
-    this.setState({ isChoosed: true });
+    this.setState({
+      isChoosed: true,
+      nextQuestion: true,
+    });
     const { questions, questionIndex, timer } = this.state;
     const { dispatch, score } = this.props;
-    console.log(typeof score);
     let sum = 0;
     const easy = 1;
     const medium = 2;
@@ -63,8 +42,6 @@ class Questions extends Component {
     if (questions[questionIndex].difficulty === 'easy'
     && questions[questionIndex].correct_answer === answer) {
       sum = ten + (timer * easy);
-      console.log('Timer easy', timer);
-      console.log('Sum easy', sum);
       dispatch(newScore(sum));
 
       return sum;
@@ -72,8 +49,6 @@ class Questions extends Component {
     if (questions[questionIndex].difficulty === 'medium'
     && questions[questionIndex].correct_answer === answer) {
       sum = ten + (timer * medium);
-      console.log('Timer medium', timer);
-      console.log('Sum medium', sum);
       dispatch(newScore(sum));
 
       return sum;
@@ -81,33 +56,14 @@ class Questions extends Component {
     if (questions[questionIndex].difficulty === 'hard'
     && questions[questionIndex].correct_answer === answer) {
       sum = ten + (timer * hard);
-      console.log('Timer hard', timer);
-      console.log('Sum hard', sum);
       dispatch(newScore(sum));
       return sum;
     }
-    // else {
+
     dispatch(newScore(sum));
-    console.log('Sum fora do if', sum);
-    //   console.log('resposta errada');
+
     return score;
-    // }
-
-    // this.scoreboard();
   };
-
-  // scoreRecorder = (answer, sec) => {
-  //   const { answers } = this.state;
-  //   const index = 0;
-  //   const perguntaAtual = answers[index];
-  //   const state = this.getLocalStorage();
-
-  //   if (answer === perguntaAtual.correct_answer) {
-  //     state.player.assertions += 1;
-  //     state.player.score += this.scoreboard(sec, perguntaAtual.difficulty);
-  //     return localStorage.setItem('state', JSON.stringify(state));
-  //   }
-  // };
 
   setQuestionsTimer = () => {
     const oneSec = 1000;
@@ -163,7 +119,9 @@ class Questions extends Component {
       loading,
       isChoosed,
       timer,
-      isDisabled } = this.state;
+      isDisabled,
+      nextQuestion,
+    } = this.state;
 
     return (
       loading ? <span>loading...</span> : (
@@ -193,12 +151,15 @@ class Questions extends Component {
             ))}
           </div>
           <div className="next-question-btn">
-            <button
-              onClick={ this.handleNextQuestion }
-              type="button"
-            >
-              Next
-            </button>
+            { nextQuestion
+            && (
+              <button
+                onClick={ this.handleNextQuestion }
+                type="button"
+                data-testid="btn-next"
+              >
+                Next
+              </button>)}
           </div>
         </section>
       )
