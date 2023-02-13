@@ -2,6 +2,7 @@ import { fetchToken } from '../../services';
 
 export const NEW_PLAYER = 'NEW_PLAYER';
 export const NEW_GAME = 'NEW_GAME';
+export const GAME_QUESTIONS = 'GAME_QUESTIONS';
 
 export const loginInfo = (name, email) => ({
   type: NEW_PLAYER,

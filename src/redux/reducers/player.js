@@ -4,6 +4,7 @@ const INITIAL_STATE = {
   name: '',
   email: '',
   score: 0,
+  assertions: 0,
 };
 
 const player = (state = INITIAL_STATE, action) => {
