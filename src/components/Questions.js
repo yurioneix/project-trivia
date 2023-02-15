@@ -64,7 +64,7 @@ class Questions extends Component {
 
     // dispatch(newScore(sum));
 
-    // return score;
+    return score;
   };
 
   setQuestionsTimer = () => {
