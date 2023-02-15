@@ -32,6 +32,8 @@ class Questions extends Component {
       nextQuestion: true,
     });
     const { questions, questionIndex, timer } = this.state;
+    console.log(questions);
+    console.log(questionIndex);
     const { dispatch, score } = this.props;
     let sum = 0;
     const easy = 1;
@@ -60,7 +62,7 @@ class Questions extends Component {
       return sum;
     }
 
-    dispatch(newScore(sum));
+    // dispatch(newScore(sum));
 
     return score;
   };
@@ -91,23 +93,56 @@ class Questions extends Component {
     }
 
     const oneQuestion = questionsResult.results[questionIndex];
+    // console.log('Perguntas completas', questionsResult);
+    // console.log('Pergunta única', oneQuestion);
+    // console.log('getquestion', questionIndex);
     const questionsAnswers = [
       ...oneQuestion.incorrect_answers,
       oneQuestion.correct_answer,
     ];
-    const sortIndex = 0.5;
-    const sortedAnswers = questionsAnswers.sort(() => Math.random() - sortIndex);
+    // console.log(questionsAnswers);
+    const result = this.sortingQuestions(questionsAnswers);
     this.setState({
-      answers: sortedAnswers,
+      answers: result,
       loading: false,
       questions: questionsResult.results,
     });
+
+    // console.log('Getquestion answers', answers);
+    // console.log('Getquestion questions', questions);
+  };
+
+  sortingQuestions = (questions) => {
+    // console.log('sorting questions', questions);
+    const sortIndex = 0.5;
+    const sortedAnswers = questions.sort(() => Math.random() - sortIndex);
+    // console.log(sortedAnswers);
+    return sortedAnswers;
   };
 
   handleNextQuestion = () => {
-    const { questionIndex } = this.state;
+    const { questionIndex, questions } = this.state;
+    // this.getQuestionsData();
+    console.log(questionIndex);
+    const count = questionIndex + 1;
+    const questionsAnswers = [
+      ...questions[count].incorrect_answers,
+      questions[count].correct_answer,
+    ];
+    // console.log(questionsAnswers);
+
+    // console.log('handleNext question', questions);
+    // console.log(this.sortingQuestions(questionsAnswers));
+    // const lastAnswer = 5;
+    if (count === questions.length - 1) {
+      const { history } = this.props;
+      history.push('/feedback');
+    }
     this.setState({
-      questionIndex: questionIndex + 1,
+      answers: this.sortingQuestions(questionsAnswers),
+      questionIndex: count,
+      isChoosed: false,
+      timer: 30,
     });
   };
 
@@ -122,7 +157,9 @@ class Questions extends Component {
       isDisabled,
       nextQuestion,
     } = this.state;
-
+    // console.log('render', questionIndex);
+    // console.log('Render answers', answers);
+    // console.log('Render questions', questions);
     return (
       loading ? <span>loading...</span> : (
         <section>
@@ -135,7 +172,7 @@ class Questions extends Component {
             className="answers-container"
             data-testid="answer-options"
           >
-            {answers.map((answer, index) => (
+            {answers?.map((answer, index) => (
               <button
                 key={ `answer-${index + 1}` }
                 disabled={ isDisabled }
