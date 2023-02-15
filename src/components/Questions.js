@@ -32,8 +32,6 @@ class Questions extends Component {
       nextQuestion: true,
     });
     const { questions, questionIndex, timer } = this.state;
-    console.log(questions);
-    console.log(questionIndex);
     const { dispatch, score } = this.props;
     let sum = 0;
     const easy = 1;
@@ -44,25 +42,23 @@ class Questions extends Component {
     if (questions[questionIndex].difficulty === 'easy'
     && questions[questionIndex].correct_answer === answer) {
       sum = ten + (timer * easy);
-      dispatch(newScore(sum));
+      dispatch(newScore(score + sum));
 
       return sum;
     }
     if (questions[questionIndex].difficulty === 'medium'
     && questions[questionIndex].correct_answer === answer) {
       sum = ten + (timer * medium);
-      dispatch(newScore(sum));
+      dispatch(newScore(score + sum));
 
       return sum;
     }
     if (questions[questionIndex].difficulty === 'hard'
     && questions[questionIndex].correct_answer === answer) {
       sum = ten + (timer * hard);
-      dispatch(newScore(sum));
+      dispatch(newScore(score + sum));
       return sum;
     }
-
-    // dispatch(newScore(sum));
 
     return score;
   };
@@ -71,11 +67,17 @@ class Questions extends Component {
     const oneSec = 1000;
     this.interval = setInterval(() => {
       const { timer } = this.state;
-      this.setState({ timer: timer - 1 });
-      if (timer === 0) {
-        clearInterval(this.interval);
-        this.setState({ isDisabled: true });
-      }
+      this.setState({
+        timer: timer - 1 }, () => {
+        const { timer: newTimer } = this.state;
+        if (newTimer === 0) {
+          clearInterval(this.interval);
+          this.setState({
+            isDisabled: true,
+            nextQuestion: true,
+          });
+        }
+      });
     }, oneSec);
   };
 
@@ -93,57 +95,48 @@ class Questions extends Component {
     }
 
     const oneQuestion = questionsResult.results[questionIndex];
-    // console.log('Perguntas completas', questionsResult);
-    // console.log('Pergunta única', oneQuestion);
-    // console.log('getquestion', questionIndex);
+
     const questionsAnswers = [
       ...oneQuestion.incorrect_answers,
       oneQuestion.correct_answer,
     ];
-    // console.log(questionsAnswers);
+
     const result = this.sortingQuestions(questionsAnswers);
     this.setState({
       answers: result,
       loading: false,
       questions: questionsResult.results,
     });
-
-    // console.log('Getquestion answers', answers);
-    // console.log('Getquestion questions', questions);
   };
 
   sortingQuestions = (questions) => {
-    // console.log('sorting questions', questions);
     const sortIndex = 0.5;
     const sortedAnswers = questions.sort(() => Math.random() - sortIndex);
-    // console.log(sortedAnswers);
+
     return sortedAnswers;
   };
 
   handleNextQuestion = () => {
     const { questionIndex, questions } = this.state;
-    // this.getQuestionsData();
-    console.log(questionIndex);
-    const count = questionIndex + 1;
-    const questionsAnswers = [
-      ...questions[count].incorrect_answers,
-      questions[count].correct_answer,
-    ];
-    // console.log(questionsAnswers);
 
-    // console.log('handleNext question', questions);
-    // console.log(this.sortingQuestions(questionsAnswers));
-    // const lastAnswer = 5;
-    if (count === questions.length - 1) {
+    const count = questionIndex + 1;
+
+    if (count < questions.length) {
+      const questionsAnswers = [
+        ...questions[count].incorrect_answers,
+        questions[count].correct_answer,
+      ];
+
+      this.setState({
+        answers: this.sortingQuestions(questionsAnswers),
+        questionIndex: count,
+        isChoosed: false,
+        timer: 30,
+      });
+    } else {
       const { history } = this.props;
       history.push('/feedback');
     }
-    this.setState({
-      answers: this.sortingQuestions(questionsAnswers),
-      questionIndex: count,
-      isChoosed: false,
-      timer: 30,
-    });
   };
 
   render() {
@@ -157,13 +150,11 @@ class Questions extends Component {
       isDisabled,
       nextQuestion,
     } = this.state;
-    // console.log('render', questionIndex);
-    // console.log('Render answers', answers);
-    // console.log('Render questions', questions);
+
     return (
       loading ? <span>loading...</span> : (
         <section>
-          <p>{timer}</p>
+          <p className="timer">{timer}</p>
           <div className="question-container">
             <h1 data-testid="question-category">{questions[questionIndex].category}</h1>
             <h2 data-testid="question-text">{questions[questionIndex].question}</h2>
@@ -187,10 +178,11 @@ class Questions extends Component {
               </button>
             ))}
           </div>
-          <div className="next-question-btn">
+          <div className="next-question-container">
             { nextQuestion
             && (
               <button
+                className="next-question-btn"
                 onClick={ this.handleNextQuestion }
                 type="button"
                 data-testid="btn-next"

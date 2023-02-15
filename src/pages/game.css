@@ -1,7 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@1,300&family=Fuzzy+Bubbles&family=Permanent+Marker&family=Raleway:ital,wght@1,200&family=Sono&family=Zen+Dots&display=swap') ;
+
+.timer {
+  border: 1px solid yellow;
+  border-radius: 10px;
+  box-shadow: 1px 5px 8px black;
+  color: white;
+  display: flex;
+  font-family: zen dots , Courier New , Courier , monospace;
+  font-size: 50px;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 10px;
+  width: fit-content;
+}
+
+.next-question-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.next-question-btn {
+  background-color: black;
+  border: 3px solid transparent;
+  display: flex;
+  font-size: 40px;
+  justify-content: center;
+  padding: 2px 15px;
+  width: fit-content;
+}
+
+.next-question-btn:hover {
+  border: 3px solid yellow;
+}
+
+
+button {
+  background-color: gray;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  box-shadow: 1px 3px 5px black;
+  color: rgb(247, 223, 3);
+  cursor: pointer;
+  font-family: chakra petch , Courier New , Courier , monospace;
+  font-size: 30px;
+  font-weight: 700;
+  margin: 10px;
+  padding: 10px;
+  width: 500px;
+}
+
+button:hover {
+  border: 1px solid rgb(248, 248, 248);
+}
+
+.answers-container {
+  align-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  font-family: chakra petch , Courier New , Courier , monospace;
+  justify-content: center;
+  padding: 10px;
+}
+
 .correct-answer {
+  align-content: center;
+  border: 3px solid rgb(6, 240, 15);
+  box-shadow: 1px 3px 5px white;
+  display: flex;
+  font-family: chakra petch , Courier New , Courier , monospace;
+  justify-content: center;
+}
+
+.correct-answer:hover {
   border: 3px solid rgb(6, 240, 15);
 }
 
 .wrong-answer {
   border: 3px solid red;
+  display: flex;
+  font-family: chakra petch , Courier New , Courier , monospace;
+  justify-content: center;
+  width: 400px;
+}
+
+.wrong-answer:hover {
+  border: 3px solid red;
+}
+
+.class-container {
+  align-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  color: white;
+  display: flex;
+  font-family: chakra petch , Courier New , Courier , monospace;
+  font-size: 40px;
+  justify-content: center;
+  margin: 10px;
+  margin-bottom: 30px;
+  text-decoration: underline;
+  text-shadow: 1px 3px 5px black;
+}
+
+h2 {
+  color: white;
+  display: flex;
+  font-family: chakra petch , Courier New , Courier , monospace;
+  font-size: 40px;
+  justify-content: center;
+  margin: 10px;
+  text-shadow: 1px 3px 5px black;
 }

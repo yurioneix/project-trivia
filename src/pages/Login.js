@@ -47,13 +47,14 @@ class Login extends Component {
   render() {
     const { name, email, isDisabled } = this.state;
     return (
-      <div>
+      <div className="login-container">
         <header className="App-header">
           <img src={ logo } className="App-logo" alt="logo" />
-          <p>SUA VEZ</p>
+          <p className="login-message">YOUR TURN!</p>
         </header>
-        <div>
+        <div className="inputs-container">
           <input
+            className="input-name"
             data-testid="input-player-name"
             name="name"
             type="text"
@@ -62,6 +63,7 @@ class Login extends Component {
             onChange={ this.handleChange }
           />
           <input
+            className="input-email"
             type="email"
             data-testid="input-gravatar-email"
             name="email"
@@ -71,6 +73,7 @@ class Login extends Component {
           />
           {/* <Link to="/game"> */}
           <button
+            className="btn-play"
             type="button"
             data-testid="btn-play"
             disabled={ isDisabled }
@@ -81,6 +84,7 @@ class Login extends Component {
           {/* </Link> */}
           <Link to="/settings">
             <button
+              className="btn-settings"
               data-testid="btn-settings"
               type="button"
             >
