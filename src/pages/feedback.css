@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@1,300&family=Fuzzy+Bubbles&family=Permanent+Marker&family=Raleway:ital,wght@1,200&family=Sono&family=Zen+Dots&display=swap') ;
+
+body {
+  margin: 10px;
+}
+
+.feedback-text {
+  color: white;
+  font-family: chakra petch , Courier New , Courier , monospace;
+  font-size: 50px;
+  text-align: center;
+  text-decoration: underline;
+}
